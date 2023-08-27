@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todos;
 
-option go_package = "grpc/handlers";
+option go_package = "internal/modules/todos";
 
 service TodosHandler {
   rpc GetTodo(GetTodoRequest) returns (Todo) {}

@@ -1,4 +1,4 @@
-package handlers
+package todos
 
 type TodosGrpcHandler interface {
 	TodosHandlerServer
