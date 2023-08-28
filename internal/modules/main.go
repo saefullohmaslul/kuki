@@ -24,7 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	todosGrpcHandler := todos.NewTodosGrpcHandler()
+	todosGrpcHandler := todos.NewGrpcHandler()
 
 	opt := []grpc.ServerOption{}
 

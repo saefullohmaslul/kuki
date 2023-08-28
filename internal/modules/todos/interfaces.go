@@ -1,5 +1,5 @@
 package todos
 
-type TodosGrpcHandler interface {
+type GrpcHandler interface {
 	TodosHandlerServer
 }
