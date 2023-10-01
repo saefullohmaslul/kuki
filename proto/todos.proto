@@ -4,11 +4,31 @@ package todos;
 
 option go_package = "internal/modules/todos";
 
+import "internal/modules/google/api/annotations.proto";
+
 service TodosHandler {
-  rpc GetTodo(GetTodoRequest) returns (Todo) {}
-  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
-  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {}
-  rpc DeleteTodo(DeleteTodoRequest) returns (Empty) {}
+  rpc GetTodo(GetTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+      get: "/todos/{todo_id}"
+    };
+  }
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {
+    option (google.api.http) = {
+      post: "/todos"
+      body: "*"
+    };
+  }
+  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {
+    option (google.api.http) = {
+      put: "/todos/{todo_id}"
+      body: "*"
+    };
+  }
+  rpc DeleteTodo(DeleteTodoRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/todos/{todo_id}"
+    };
+  }
 }
 
 message Todo {
