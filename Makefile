@@ -11,7 +11,7 @@ gen-protoc:
 
 .PHONY: build
 build:
-	@go build -o ./dist/kuki ./internal/modules
+	@go build -o ./dist/kuki ./internal
 
 .PHONY: run
 run:

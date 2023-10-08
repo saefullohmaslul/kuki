@@ -5,15 +5,15 @@ import (
 	"github.com/saefullohmaslul/kuki/internal/grpc"
 )
 
-type todosGrpcHandler struct {
+type grpcHandler struct {
 }
 
-func NewTodosGrpcHandler() GrpcHandler {
-	return &todosGrpcHandler{}
+func NewGrpcHandler() GrpcHandler {
+	return &grpcHandler{}
 }
 
 // GetTodo is a function to get to do by id
-func (h *todosGrpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) (data *grpc.Todo, err error) {
+func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) (data *grpc.Todo, err error) {
 	data = &grpc.Todo{
 		TodoId:      "abc",
 		Title:       "Makan siang",
@@ -23,7 +23,7 @@ func (h *todosGrpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequ
 	return
 }
 
-func (h *todosGrpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoRequest) (data *grpc.CreateTodoResponse, err error) {
+func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoRequest) (data *grpc.CreateTodoResponse, err error) {
 	mockData := &grpc.Todo{
 		Title:       params.Title,
 		Description: params.Description,
@@ -35,7 +35,7 @@ func (h *todosGrpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTo
 
 	return response, nil
 }
-func (h *todosGrpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
+func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
 	mockData := &grpc.Todo{
 		TodoId:      params.TodoId,
 		Title:       params.Title,
@@ -49,6 +49,6 @@ func (h *todosGrpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTo
 
 	return response, nil
 }
-func (h *todosGrpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
+func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
 	return &grpc.Empty{}, nil
 }
