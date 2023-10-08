@@ -18,3 +18,13 @@ build:
 .PHONY: run
 run:
 	@./dist/kuki
+
+protoc:
+	protoc -I . \
+	--grpc-gateway_out . \
+	--grpc-gateway_opt logtostderr=true \
+	--grpc-gateway_opt generate_unbound_methods=true \
+	--go-grpc_out=. \
+	--go_out=. \
+	./proto/*.proto \
+	./internal/modules/google/api/*.proto

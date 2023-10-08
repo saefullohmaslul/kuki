@@ -27,11 +27,31 @@ func (h *todosGrpcHandler) mustEmbedUnimplementedTodosHandlerServer() {
 }
 
 func (h *todosGrpcHandler) CreateTodo(ctx context.Context, params *CreateTodoRequest) (data *CreateTodoResponse, err error) {
-	return
+	mockData := &Todo{
+		Title:       params.Title,
+		Description: params.Description,
+	}
+
+	response := &CreateTodoResponse{
+		Todo: mockData,
+	}
+
+	return response, nil
 }
 func (h *todosGrpcHandler) UpdateTodo(ctx context.Context, params *UpdateTodoRequest) (data *UpdateTodoResponse, err error) {
-	return
+	mockData := &Todo{
+		TodoId:      params.TodoId,
+		Title:       params.Title,
+		Description: params.Description,
+		Completed:   params.Completed,
+	}
+
+	response := &UpdateTodoResponse{
+		Todo: mockData,
+	}
+
+	return response, nil
 }
 func (h *todosGrpcHandler) DeleteTodo(ctx context.Context, params *DeleteTodoRequest) (data *Empty, err error) {
-	return
+	return &Empty{}, nil
 }
