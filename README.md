@@ -37,43 +37,52 @@ cd kuki
 2. Install the required dependencies:
 
 ```bash
-go get -u github.com/labstack/echo/v4
-go get -u google.golang.org/grpc
+go install github.com/cosmtrek/air@v1.45.0
+
+go mod tidy
+go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.18.0
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
 ```
 
 ## Usage
 
-1. Navigate to the `grpc_server` directory and run the gRPC server:
+1. Running service using
 
 ```bash
-cd grpc_server
-go run main.go
+make build
+make run
 ```
 
-2. In a separate terminal window, navigate to the `rest_server` directory and run the REST API server:
+2To run in development mode (hot loader), using this command
 
 ```bash
-cd rest_server
-go run main.go
+make run-dev
 ```
 
-3. You can now access the gRPC and REST API endpoints as described in the [Endpoints](#endpoints) section below.
+3. To generate proto files, using this command
+
+```bash
+make protoc
+```
+
+4. You can now access the gRPC and REST API endpoints as described in the [Endpoints](#endpoints) section below.
 
 ## Endpoints
 
 ### gRPC Endpoints
 
-- Create Todo: `POST http://localhost:50051/todo`
-- Read Todo: `GET http://localhost:50051/todo/{id}`
-- Update Todo: `PUT http://localhost:50051/todo`
-- Delete Todo: `DELETE http://localhost:50051/todo/{id}`
+- Create Todo: `POST http://localhost:50051/todos`
+- Read Todo: `GET http://localhost:50051/todos/{id}`
+- Update Todo: `PUT http://localhost:50051/todos`
+- Delete Todo: `DELETE http://localhost:50051/todos/{id}`
 
 ### REST API Endpoints
 
-- Create Todo: `POST http://localhost:1323/todo`
-- Read Todo: `GET http://localhost:1323/todo/:id`
-- Update Todo: `PUT http://localhost:1323/todo/:id`
-- Delete Todo: `DELETE http://localhost:1323/todo/:id`
+- Create Todo: `POST http://localhost:1323/todos`
+- Read Todo: `GET http://localhost:1323/todos/:id`
+- Update Todo: `PUT http://localhost:1323/todos/:id`
+- Delete Todo: `DELETE http://localhost:1323/todos/:id`
 
 ## Contributing
 
