@@ -9,6 +9,7 @@ import (
 	"go.uber.org/fx"
 	"net"
 	"os"
+	"time"
 )
 
 var Module = fx.Options(
@@ -21,29 +22,35 @@ func bootstrap(
 	lifecycle fx.Lifecycle,
 	dependencies *app.Dependencies,
 ) {
+	env.LoadDefaultEnv()
+
+	var (
+		grpcPort      = os.Getenv("GRPC_PORT")
+		restPort      = os.Getenv("REST_PORT")
+		grpcListen, _ = net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
+		grpc          = app.NewGrpc(grpcPort, grpcListen, dependencies)
+		rest          = app.NewRest(restPort, grpcListen)
+	)
+
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
-				env.LoadDefaultEnv()
-
-				var (
-					grpcPort      = os.Getenv("GRPC_PORT")
-					restPort      = os.Getenv("REST_PORT")
-					grpcListen, _ = net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
-				)
-
 				go func() {
-					grpc := app.NewGrpc(grpcPort, grpcListen, dependencies)
 					grpc.Start(ctx)
 				}()
 
 				go func() {
-					rest := app.NewRest(restPort, grpcListen)
 					rest.Start(ctx)
 				}()
+
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {
+				ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+				defer cancel()
+
+				rest.Shutdown(ctx)
+				grpc.Shutdown(ctx)
 				return nil
 			},
 		},

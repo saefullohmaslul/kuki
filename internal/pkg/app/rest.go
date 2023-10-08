@@ -6,6 +6,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
+	"github.com/labstack/gommon/log"
 	internalGrpc "github.com/saefullohmaslul/kuki/internal/grpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -15,6 +16,7 @@ import (
 type Rest struct {
 	port     string
 	listener net.Listener
+	server   *echo.Echo
 }
 
 func NewRest(port string, listener net.Listener) App {
@@ -35,7 +37,7 @@ func (a *Rest) Start(ctx context.Context) {
 		panic(err)
 	}
 
-	app := echo.New()
+	a.server = echo.New()
 	mux := runtime.NewServeMux()
 
 	err = internalGrpc.RegisterTodosHandlerHandler(ctx, mux, conn)
@@ -43,12 +45,18 @@ func (a *Rest) Start(ctx context.Context) {
 		panic(err)
 	}
 
-	app.Any("*", echo.WrapHandler(mux))
+	a.server.Any("*", echo.WrapHandler(mux))
 
 	fmt.Printf("⇨ http server started on %s\n", color.New().Magenta(fmt.Sprintf(":%s", a.port)))
 
-	err = app.Start(fmt.Sprintf(":%s", a.port))
+	_ = a.server.Start(fmt.Sprintf(":%s", a.port))
+}
+
+func (a *Rest) Shutdown(ctx context.Context) {
+	err := a.server.Shutdown(ctx)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Server shutdown error: %v", err)
 	}
+
+	log.Info("Rest server shutdown")
 }

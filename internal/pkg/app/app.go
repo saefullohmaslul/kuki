@@ -8,6 +8,7 @@ import (
 
 type App interface {
 	Start(ctx context.Context)
+	Shutdown(ctx context.Context)
 }
 
 type Dependencies struct {
