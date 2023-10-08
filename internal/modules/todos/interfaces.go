@@ -1,5 +1,7 @@
 package todos
 
-type TodosGrpcHandler interface {
-	TodosHandlerServer
+import "github.com/saefullohmaslul/kuki/internal/grpc"
+
+type GrpcHandler interface {
+	grpc.TodosHandlerServer
 }

@@ -16,10 +16,10 @@ syntax = "proto3";
 
 package google.api;
 
-import "internal/modules/google/api/http.proto";
+import "google/http.proto";
 import "google/protobuf/descriptor.proto";
 
-option go_package = "internal/modules/todos";
+option go_package = "internal/grpc";
 // option java_multiple_files = true;
 // option java_outer_classname = "AnnotationsProto";
 // option java_package = "com.google.api";

@@ -17,7 +17,7 @@ syntax = "proto3";
 package google.api;
 
 // option cc_enable_arenas = true;
-option go_package = "internal/modules/todos";
+option go_package = "internal/grpc";
 // option java_multiple_files = true;
 // option java_outer_classname = "HttpProto";
 // option java_package = "com.google.api";

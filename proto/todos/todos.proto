@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package todos;
 
-option go_package = "internal/modules/todos";
+option go_package = "internal/grpc";
 
-import "internal/modules/google/api/annotations.proto";
+import "google/annotations.proto";
 
 service TodosHandler {
   rpc GetTodo(GetTodoRequest) returns (Todo) {

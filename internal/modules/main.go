@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
+	internalGrpc "github.com/saefullohmaslul/kuki/internal/grpc"
 	"github.com/saefullohmaslul/kuki/internal/modules/todos"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -22,22 +23,22 @@ func main() {
 		panic(err)
 	}
 
-	port := os.Getenv("GRPC_PORT")
+	grpcPort := os.Getenv("GRPC_PORT")
 
-	listen, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
 	if err != nil {
 		panic(err)
 	}
 
-	opt := []grpc.ServerOption{}
+	var opt []grpc.ServerOption
 	server := grpc.NewServer(opt...)
 	reflection.Register(server)
 
 	todosGrpcHandler := todos.NewTodosGrpcHandler()
 
-	todos.RegisterTodosHandlerServer(server, todosGrpcHandler)
+	internalGrpc.RegisterTodosHandlerServer(server, todosGrpcHandler)
 
-	fmt.Printf("⇨ grpc server started on %s\n", color.New().Magenta(fmt.Sprintf(":%s", port)))
+	fmt.Printf("⇨ grpc server started on %s\n", color.New().Magenta(fmt.Sprintf(":%s", grpcPort)))
 
 	go func() {
 		err := server.Serve(listen)
@@ -59,7 +60,7 @@ func main() {
 	app := echo.New()
 	gwmux := runtime.NewServeMux()
 
-	err = todos.RegisterTodosHandlerHandler(context.Background(), gwmux, conn)
+	err = internalGrpc.RegisterTodosHandlerHandler(context.Background(), gwmux, conn)
 
 	if err != nil {
 		panic(err)
