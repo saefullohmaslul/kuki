@@ -54,7 +54,7 @@ make build
 make run
 ```
 
-2To run in development mode (hot loader), using this command
+2. To run in development mode (hot loader), using this command
 
 ```bash
 make run-dev
@@ -90,7 +90,7 @@ Contributions to Kuki are welcome! Feel free to open issues for feature requests
 
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature/my-feature`.
-3. Make your changes and commit them: `git commit -am 'Add some feature'`.
+3. Make your changes and commit them: `git commit -am 'feat(deps): Add some feature'`. We are using conventional commit for standardization commit messages.
 4. Push the branch: `git push origin feature/my-feature`.
 5. Open a pull request.
 
