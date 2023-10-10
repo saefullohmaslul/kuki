@@ -6,20 +6,18 @@ import (
 )
 
 type grpcHandler struct {
+	usecase UseCase
 }
 
-func NewGrpcHandler() GrpcHandler {
-	return &grpcHandler{}
+func NewGrpcHandler(usecase UseCase) GrpcHandler {
+	return &grpcHandler{
+		usecase: usecase,
+	}
 }
 
 // GetTodo is a function to get to do by id
 func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) (data *grpc.Todo, err error) {
-	data = &grpc.Todo{
-		TodoId:      "abc",
-		Title:       "Makan siang",
-		Description: "Makan siang dengan istri",
-		Completed:   false,
-	}
+	data, err = h.usecase.GetTodo(ctx, params)
 	return
 }
 

@@ -1,3 +1,7 @@
+ifeq ($(OS), Windows_NT)
+	EXT :=.exe
+endif
+
 .PHONY: help
 help: ## Show help command
 	@clear
@@ -17,7 +21,7 @@ protoc: ## Generate protobuf files
 
 .PHONY: build
 build: ## Build server binary
-	@go build -o ./dist/kuki ./internal
+	@go build -o ./dist/kuki${EXT} ./internal
 
 .PHONY: run
 run: ## Run server in production mode
