@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"time"
+
 	"github.com/saefullohmaslul/kuki/internal/modules/todos"
 	"github.com/saefullohmaslul/kuki/internal/pkg/app"
 	"github.com/saefullohmaslul/kuki/internal/pkg/env"
 	"go.uber.org/fx"
-	"net"
-	"os"
-	"time"
 )
 
 var Module = fx.Options(
