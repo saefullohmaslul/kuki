@@ -2,8 +2,8 @@
 
 DROP TABLE IF EXISTS todos;
 CREATE TABLE todos (
-    todo_id serial PRIMARY KEY,
+    todo_id varchar(255) PRIMARY KEY,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    completed INTEGER NOT NULL DEFAULT 0
+    completed BOOLEAN NOT NULL DEFAULT false
 );

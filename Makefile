@@ -12,7 +12,7 @@ protoc: ## Generate protobuf files
 	@go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
 	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
 	@echo "Generating protobuf files..."
-	@protoc -I ./proto --go_out=./ --go-grpc_out=require_unimplemented_servers=false:./ --grpc-gateway_out . --grpc-gateway_opt logtostderr=true --grpc-gateway_opt generate_unbound_methods=true ./proto/*/*.proto
+	@protoc -I ./proto --go_out=./ --go-grpc_out=require_unimplemented_servers=false:./ --grpc-gateway_out . --grpc-gateway_opt logtostderr=true --grpc-gateway_opt generate_unbound_methods=true ./proto/todos/*.proto ./proto/google/*.proto
 	@echo "Done"
 
 .PHONY: build
@@ -26,3 +26,7 @@ run: ## Run server in production mode
 .PHONY: run-dev
 run-dev: ## Run server in development mode (will restart if any changes)
 	@air -c .air.toml
+
+.PHONY: docker-compose
+up: ## Run server in docker-compose
+	@docker-compose up -d
