@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package todos;
+
+option go_package = "internal/grpc";
+
+import "google/annotations.proto";
+
+service TodosHandler {
+  rpc GetTodo(GetTodoRequest) returns (Todo) {
+    option (google.api.http) = {
+      get: "/todos/{todo_id}"
+    };
+  }
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {
+    option (google.api.http) = {
+      post: "/todos"
+      body: "*"
+    };
+  }
+  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {
+    option (google.api.http) = {
+      put: "/todos/{todo_id}"
+      body: "*"
+    };
+  }
+  rpc DeleteTodo(DeleteTodoRequest) returns (Empty) {
+    option (google.api.http) = {
+      delete: "/todos/{todo_id}"
+    };
+  }
+}
+
+message Todo {
+  string todo_id = 1;
+  string title = 2;
+  string description = 3;
+  bool completed = 4;
+}
+
+message GetTodoRequest {
+  string todo_id = 1;
+}
+
+message CreateTodoRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message CreateTodoResponse {
+  Todo todo = 1;
+}
+
+message UpdateTodoRequest {
+  string todo_id = 1;
+  string title = 2;
+  string description = 3;
+  bool completed = 4;
+}
+
+message UpdateTodoResponse {
+  Todo todo = 1;
+}
+
+message DeleteTodoRequest {
+  string todo_id = 1;
+}
+
+message Empty {}
+
