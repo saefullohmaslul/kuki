@@ -31,11 +31,6 @@ func (r *Repository) InsertTodo(request *models.Todo) error {
 }
 
 
-// DeleteTodoById implements interfaces.TodosRepository.
-func (*Repository) DeleteTodoById(id string) error {
-	panic("unimplemented")
-}
-
 // FindTodoById implements interfaces.TodosRepository.
 func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
 	var todo models.Todo
@@ -53,6 +48,21 @@ func (r *Repository) UpdateTodoById(id string, request *models.Todo) error {
 	tx := r.DB.Begin()
 
 	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Updates(request).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
+// DeleteTodoById implements interfaces.TodosRepository.
+func (r *Repository) DeleteTodoById(id string) error {
+	tx := r.DB.Begin()
+
+	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Delete(&models.Todo{}).Error
 	if err != nil {
 		tx.Rollback()
 		return err

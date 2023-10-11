@@ -20,16 +20,16 @@ func (s *Service) InsertTodo(request *models.Todo) error {
 }
 
 // DeleteTodoById implements interfaces.TodosService.
-func (*Service) DeleteTodoById(id string) error {
-	panic("unimplemented")
+func (s *Service) DeleteTodoById(id string) error {
+	return  s.Repository.DeleteTodoById(id)
 }
 
 // FindTodoById implements interfaces.TodosService.
-func (s*Service) FindTodoById(id string) (*models.Todo, error) {
+func (s *Service) FindTodoById(id string) (*models.Todo, error) {
 	return s.Repository.FindTodoById(id)
 }
 
 // UpdateTodoById implements interfaces.TodosService.
-func (s*Service) UpdateTodoById(id string, request *models.Todo) error {
+func (s *Service) UpdateTodoById(id string, request *models.Todo) error {
 	return s.Repository.UpdateTodoById(id, request)
 }

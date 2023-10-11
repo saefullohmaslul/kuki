@@ -91,5 +91,10 @@ func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoReq
 }
 
 func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
+	err = h.todoService.DeleteTodoById(params.TodoId)
+	if err != nil {
+		return nil, err
+	}
+
 	return &grpc.Empty{}, nil
 }
