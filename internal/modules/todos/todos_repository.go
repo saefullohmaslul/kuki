@@ -49,6 +49,16 @@ func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
 }
 
 // UpdateTodoById implements interfaces.TodosRepository.
-func (*Repository) UpdateTodoById(id string, request *models.Todo) error {
-	panic("unimplemented")
+func (r *Repository) UpdateTodoById(id string, request *models.Todo) error {
+	tx := r.DB.Begin()
+
+	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Updates(request).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
 }
