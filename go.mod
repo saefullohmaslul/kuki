@@ -3,6 +3,7 @@ module github.com/saefullohmaslul/kuki
 go 1.20
 
 require (
+	github.com/google/uuid v1.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.11.1
