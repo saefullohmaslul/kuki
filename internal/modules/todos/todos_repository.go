@@ -16,15 +16,55 @@ func NewTodosRepository(database database.Database) interfaces.TodosRepository {
 	}
 }
 
-func (r *Repository) InsertTodo(request *models.Todo) (*models.Todo, error) {
+func (r *Repository) InsertTodo(request *models.Todo) error {
 	tx := r.DB.Begin()
 
-	if err := tx.Model(&models.Todo{}).Create(request).Error; err != nil {
+	err := tx.Model(&models.Todo{}).Create(request).Error
+	if err != nil {
 		tx.Rollback()
-		return nil, err
+		return err
 	}
 
 	tx.Commit()
 
-	return request, nil
+	return nil
+}
+
+func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
+	var todo models.Todo
+
+	err := r.DB.Model(&models.Todo{}).Where("todo_id = ?", id).First(&todo).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &todo, nil
+}
+
+func (r *Repository) UpdateTodoById(id string, request *models.Todo) error {
+	tx := r.DB.Begin()
+
+	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Updates(request).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
+func (r *Repository) DeleteTodoById(id string) error {
+	tx := r.DB.Begin()
+
+	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Delete(&models.Todo{}).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	tx.Commit()
+
+	return nil
 }
