@@ -37,8 +37,15 @@ func (*Repository) DeleteTodoById(id string) error {
 }
 
 // FindTodoById implements interfaces.TodosRepository.
-func (*Repository) FindTodoById(id string) (*models.Todo, error) {
-	panic("unimplemented")
+func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
+	var todo models.Todo
+
+	err := r.DB.Model(&models.Todo{}).Where("todo_id = ?", id).First(&todo).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &todo, nil
 }
 
 // UpdateTodoById implements interfaces.TodosRepository.

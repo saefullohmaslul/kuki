@@ -22,13 +22,19 @@ func NewGrpcHandler(todoService interfaces.TodosService) GrpcHandler {
 
 // GetTodo is a function to get to do by id
 func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) (data *grpc.Todo, err error) {
-	data = &grpc.Todo{
-		TodoId:      "abc",
-		Title:       "Makan siang",
-		Description: "Makan siang dengan istri",
-		Completed:   false,
+	todo, err := h.todoService.FindTodoById(params.TodoId)
+	if err != nil {
+		return nil, err
 	}
-	return
+
+	mockData := &grpc.Todo{
+		TodoId:      todo.TodoId,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Completed:   todo.Completed,
+	}
+
+	return mockData, nil
 }
 
 func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoRequest) (data *grpc.CreateTodoResponse, err error) {
