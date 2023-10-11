@@ -30,6 +30,6 @@ func (s*Service) FindTodoById(id string) (*models.Todo, error) {
 }
 
 // UpdateTodoById implements interfaces.TodosService.
-func (*Service) UpdateTodoById(id string, request *models.Todo) error {
-	panic("unimplemented")
+func (s*Service) UpdateTodoById(id string, request *models.Todo) error {
+	return s.Repository.UpdateTodoById(id, request)
 }

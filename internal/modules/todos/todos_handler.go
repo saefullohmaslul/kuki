@@ -63,7 +63,19 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 
 	return response, nil
 }
+
 func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
+	request := &models.Todo{
+		Title:       params.Title,
+		Description: params.Description,
+		Completed:   params.Completed,
+	}
+
+	err = h.todoService.UpdateTodoById(params.TodoId, request)
+	if err != nil {
+		return nil, err
+	}
+
 	mockData := &grpc.Todo{
 		TodoId:      params.TodoId,
 		Title:       params.Title,
@@ -77,6 +89,7 @@ func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoReq
 
 	return response, nil
 }
+
 func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
 	return &grpc.Empty{}, nil
 }
