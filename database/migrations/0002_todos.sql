@@ -1,5 +1,3 @@
-\c todos;
-
 DROP TABLE IF EXISTS todos;
 CREATE TABLE todos (
     todo_id varchar(255) PRIMARY KEY,

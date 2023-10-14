@@ -2,7 +2,7 @@
 help: ## Show help command
 	@clear
 	@printf "===================================================================\n"
-	@printf "\033[1mWelcome to kuki service\033[0m\n";
+	@printf "\033[1mWelcome to kuki UseCase\033[0m\n";
 	@printf "===================================================================\n"
 	@grep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-30s\033[0m %s\n", $$1, $$2}'
 
