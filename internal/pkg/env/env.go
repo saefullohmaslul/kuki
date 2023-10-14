@@ -5,8 +5,5 @@ import (
 )
 
 func LoadDefaultEnv() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic(err)
-	}
+	_ = godotenv.Load(".env")
 }

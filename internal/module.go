@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/saefullohmaslul/kuki/internal/modules/todos"
 	"github.com/saefullohmaslul/kuki/internal/pkg/app"
+	"github.com/saefullohmaslul/kuki/internal/pkg/database"
 	"github.com/saefullohmaslul/kuki/internal/pkg/env"
+	"github.com/saefullohmaslul/kuki/internal/pkg/validator"
 	"go.uber.org/fx"
 	"net"
 	"os"
@@ -13,6 +15,8 @@ import (
 )
 
 var Module = fx.Options(
+	database.Module,
+	validator.Module,
 	todos.Module,
 	app.Module,
 	fx.Invoke(bootstrap),
