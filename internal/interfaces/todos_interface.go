@@ -1,6 +1,13 @@
 package interfaces
 
-import "github.com/saefullohmaslul/kuki/internal/models"
+import (
+	"github.com/saefullohmaslul/kuki/internal/grpc"
+	"github.com/saefullohmaslul/kuki/internal/models"
+)
+
+type TodosGrpcHandler interface {
+	grpc.TodosHandlerServer
+}
 
 type TodosRepository interface {
 	InsertTodo(request *models.Todo) error

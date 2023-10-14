@@ -10,11 +10,10 @@ import (
 )
 
 type grpcHandler struct {
-		todoService interfaces.TodosService
-
+	todoService interfaces.TodosService
 }
 
-func NewGrpcHandler(todoService interfaces.TodosService) GrpcHandler {
+func NewGrpcHandler(todoService interfaces.TodosService) interfaces.TodosGrpcHandler {
 	return &grpcHandler{
 		todoService: todoService,
 	}
@@ -98,4 +97,3 @@ func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoReq
 
 	return &grpc.Empty{}, nil
 }
-
