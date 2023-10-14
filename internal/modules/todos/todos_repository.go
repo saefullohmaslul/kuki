@@ -7,19 +7,19 @@ import (
 )
 
 type Repository struct {
-	database.Database
+	postgres database.Postgres
 }
 
-func NewTodosRepository(database database.Database) interfaces.TodosRepository {
+func NewRepository(postgres database.Postgres) interfaces.TodosRepository {
 	return &Repository{
-		Database: database,
+		postgres: postgres,
 	}
 }
 
-func (r *Repository) InsertTodo(request *models.Todo) error {
-	tx := r.DB.Begin()
+func (r *Repository) InsertTodo(request *models.Todos) error {
+	tx := r.postgres.DB.Begin()
 
-	err := tx.Model(&models.Todo{}).Create(request).Error
+	err := tx.Model(&models.Todos{}).Create(request).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -31,10 +31,10 @@ func (r *Repository) InsertTodo(request *models.Todo) error {
 }
 
 // FindTodoById implements interfaces.TodosRepository.
-func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
-	var todo models.Todo
+func (r *Repository) FindTodoById(id string) (*models.Todos, error) {
+	var todo models.Todos
 
-	err := r.DB.Model(&models.Todo{}).Where("todo_id = ?", id).First(&todo).Error
+	err := r.postgres.DB.Model(&models.Todos{}).Where("todo_id = ?", id).First(&todo).Error
 	if err != nil {
 		return nil, err
 	}
@@ -43,10 +43,10 @@ func (r *Repository) FindTodoById(id string) (*models.Todo, error) {
 }
 
 // UpdateTodoById implements interfaces.TodosRepository.
-func (r *Repository) UpdateTodoById(id string, request *models.Todo) error {
-	tx := r.DB.Begin()
+func (r *Repository) UpdateTodoById(id string, request *models.Todos) error {
+	tx := r.postgres.DB.Begin()
 
-	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Updates(request).Error
+	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Updates(request).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -59,9 +59,9 @@ func (r *Repository) UpdateTodoById(id string, request *models.Todo) error {
 
 // DeleteTodoById implements interfaces.TodosRepository.
 func (r *Repository) DeleteTodoById(id string) error {
-	tx := r.DB.Begin()
+	tx := r.postgres.DB.Begin()
 
-	err := tx.Model(&models.Todo{}).Where("todo_id = ?", id).Delete(&models.Todo{}).Error
+	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Delete(&models.Todos{}).Error
 	if err != nil {
 		tx.Rollback()
 		return err

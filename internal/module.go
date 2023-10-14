@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/saefullohmaslul/kuki/internal/modules/todos"
 	"github.com/saefullohmaslul/kuki/internal/pkg/app"
+	"github.com/saefullohmaslul/kuki/internal/pkg/database"
 	"github.com/saefullohmaslul/kuki/internal/pkg/env"
 	"go.uber.org/fx"
 	"net"
@@ -13,6 +14,7 @@ import (
 )
 
 var Module = fx.Options(
+	database.Module,
 	todos.Module,
 	app.Module,
 	fx.Invoke(bootstrap),

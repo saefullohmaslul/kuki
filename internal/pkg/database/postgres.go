@@ -9,11 +9,11 @@ import (
 	"gorm.io/gorm"
 )
 
-type Database struct {
+type Postgres struct {
 	*gorm.DB
 }
 
-func NewDatabase() Database {
+func NewDatabasePostgres() Postgres {
 	var (
 		connection *gorm.DB
 		err        error
@@ -35,7 +35,7 @@ func NewDatabase() Database {
 		panic(err)
 	}
 
-	return Database{
+	return Postgres{
 		DB: connection,
 	}
 }
