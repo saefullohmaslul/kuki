@@ -6,17 +6,17 @@ import (
 	"github.com/saefullohmaslul/kuki/internal/pkg/database"
 )
 
-type Repository struct {
+type repository struct {
 	postgres database.Postgres
 }
 
 func NewRepository(postgres database.Postgres) interfaces.TodosRepository {
-	return &Repository{
+	return &repository{
 		postgres: postgres,
 	}
 }
 
-func (r *Repository) InsertTodo(request *models.Todos) error {
+func (r *repository) InsertTodo(request *models.Todos) error {
 	tx := r.postgres.DB.Begin()
 
 	err := tx.Model(&models.Todos{}).Create(request).Error
@@ -31,7 +31,7 @@ func (r *Repository) InsertTodo(request *models.Todos) error {
 }
 
 // FindTodoById implements interfaces.TodosRepository.
-func (r *Repository) FindTodoById(id string) (*models.Todos, error) {
+func (r *repository) FindTodoById(id string) (*models.Todos, error) {
 	var todo models.Todos
 
 	err := r.postgres.DB.Model(&models.Todos{}).Where("todo_id = ?", id).First(&todo).Error
@@ -43,7 +43,7 @@ func (r *Repository) FindTodoById(id string) (*models.Todos, error) {
 }
 
 // UpdateTodoById implements interfaces.TodosRepository.
-func (r *Repository) UpdateTodoById(id string, request *models.Todos) error {
+func (r *repository) UpdateTodoById(id string, request *models.Todos) error {
 	tx := r.postgres.DB.Begin()
 
 	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Updates(request).Error
@@ -58,7 +58,7 @@ func (r *Repository) UpdateTodoById(id string, request *models.Todos) error {
 }
 
 // DeleteTodoById implements interfaces.TodosRepository.
-func (r *Repository) DeleteTodoById(id string) error {
+func (r *repository) DeleteTodoById(id string) error {
 	tx := r.postgres.DB.Begin()
 
 	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Delete(&models.Todos{}).Error
