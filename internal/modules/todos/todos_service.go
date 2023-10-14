@@ -25,8 +25,8 @@ func (*Service) DeleteTodoById(id string) error {
 }
 
 // FindTodoById implements interfaces.TodosService.
-func (*Service) FindTodoById(id string) (*models.Todo, error) {
-	panic("unimplemented")
+func (s*Service) FindTodoById(id string) (*models.Todo, error) {
+	return s.Repository.FindTodoById(id)
 }
 
 // UpdateTodoById implements interfaces.TodosService.
