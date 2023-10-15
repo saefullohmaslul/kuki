@@ -8,10 +8,7 @@ type (
 	}
 
 	GetTodoResponse struct {
-		TodoID      string `json:"todo_id"`
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Completed   bool   `json:"completed"`
+		models.Todos
 	}
 )
 
@@ -21,6 +18,16 @@ type (
 	}
 
 	CreateTodoResponse struct {
+		models.Todos
+	}
+)
+
+type (
+	UpdateTodoRequest struct {
+		models.Todos
+	}
+
+	UpdateTodoResponse struct {
 		models.Todos
 	}
 )

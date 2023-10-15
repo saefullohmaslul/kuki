@@ -50,42 +50,37 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 		return
 	}
 
-	data = &grpc.CreateTodoResponse{
-		Todo: &grpc.Todo{
-			TodoId:      todo.TodoID,
-			Title:       todo.Title,
-			Description: todo.Description,
-			Completed:   todo.Completed,
-		},
+	data.Todo = &grpc.Todo{
+		TodoId:      todo.TodoID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Completed:   todo.Completed,
 	}
 
 	return
 }
 
 func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
-	request := &models.Todos{
-		Title:       params.Title,
-		Description: params.Description,
-		Completed:   params.Completed,
-	}
+	todo, err := h.todosUseCase.UpdateTodo(ctx, &dtos.UpdateTodoRequest{
+		Todos: models.Todos{
+			Title:       params.Title,
+			Description: params.Description,
+			Completed:   params.Completed,
+		},
+	})
 
-	err = h.todosUseCase.UpdateTodoById(params.TodoId, request)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	mockData := &grpc.Todo{
-		TodoId:      params.TodoId,
-		Title:       params.Title,
-		Description: params.Description,
-		Completed:   params.Completed,
+	data.Todo = &grpc.Todo{
+		TodoId:      todo.TodoID,
+		Title:       todo.Title,
+		Description: todo.Description,
+		Completed:   todo.Completed,
 	}
 
-	response := &grpc.UpdateTodoResponse{
-		Todo: mockData,
-	}
-
-	return response, nil
+	return
 }
 
 func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {

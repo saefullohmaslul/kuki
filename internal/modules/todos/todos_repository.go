@@ -18,33 +18,6 @@ func NewRepository(postgres database.Postgres) interfaces.TodosRepository {
 	}
 }
 
-// FindTodoById implements interfaces.TodosRepository.
-func (r *repository) FindTodoById(id string) (*models.Todos, error) {
-	var todo models.Todos
-
-	err := r.postgres.DB.Model(&models.Todos{}).Where("todo_id = ?", id).First(&todo).Error
-	if err != nil {
-		return nil, err
-	}
-
-	return &todo, nil
-}
-
-// UpdateTodoById implements interfaces.TodosRepository.
-func (r *repository) UpdateTodoById(id string, request *models.Todos) error {
-	tx := r.postgres.DB.Begin()
-
-	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Updates(request).Error
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	tx.Commit()
-
-	return nil
-}
-
 // DeleteTodoById implements interfaces.TodosRepository.
 func (r *repository) DeleteTodoById(id string) error {
 	tx := r.postgres.DB.Begin()
@@ -66,7 +39,7 @@ func (r *repository) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (
 		WithContext(ctx).
 		Table("todos").
 		Where("todo_id = ?", params.TodoID).
-		Find(&data).
+		Find(&data.Todos).
 		Error
 
 	return
@@ -85,5 +58,18 @@ func (r *repository) CreateTodo(ctx context.Context, params *models.Todos) (data
 	}
 
 	data.Todos = *params
+	return
+}
+
+// UpdateTodo is function to update todo
+func (r *repository) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest) (data dtos.UpdateTodoResponse, err error) {
+	err = r.postgres.DB.
+		WithContext(ctx).
+		Table("todos").
+		Where("todo_id = ?", params.TodoID).
+		Updates(&params.Todos).
+		Error
+
+	data.Todos = params.Todos
 	return
 }

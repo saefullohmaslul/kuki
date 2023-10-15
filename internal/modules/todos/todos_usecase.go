@@ -5,7 +5,6 @@ import (
 	"github.com/saefullohmaslul/kuki/internal/constants"
 	"github.com/saefullohmaslul/kuki/internal/dtos"
 	"github.com/saefullohmaslul/kuki/internal/interfaces"
-	"github.com/saefullohmaslul/kuki/internal/models"
 	"github.com/saefullohmaslul/kuki/internal/pkg/response"
 	"github.com/saefullohmaslul/kuki/internal/pkg/validator"
 	"net/http"
@@ -25,16 +24,6 @@ func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseC
 // DeleteTodoById implements interfaces.TodosUseCase
 func (s *useCase) DeleteTodoById(id string) error {
 	return s.todosRepository.DeleteTodoById(id)
-}
-
-// FindTodoById implements interfaces.TodosUseCase
-func (s *useCase) FindTodoById(id string) (*models.Todos, error) {
-	return s.todosRepository.FindTodoById(id)
-}
-
-// UpdateTodoById implements interfaces.TodosUseCase
-func (s *useCase) UpdateTodoById(id string, request *models.Todos) error {
-	return s.todosRepository.UpdateTodoById(id, request)
 }
 
 // GetTodo is function to get todo detail
@@ -66,7 +55,7 @@ func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (dat
 // CreateTodo is function to create todo
 func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest) (data dtos.CreateTodoResponse, err error) {
 	if err = s.validator.Validate(params); err != nil {
-		err = response.New[dtos.GetTodoResponse]().
+		err = response.New[dtos.CreateTodoResponse]().
 			Error().
 			SetCode(http.StatusBadRequest).
 			SetMessage(constants.ErrFailedValidateRequest).
@@ -81,6 +70,32 @@ func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest
 			Error().
 			SetCode(http.StatusInternalServerError).
 			SetMessage(constants.ErrFailedCreateTodo).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	return
+}
+
+// UpdateTodo is function to update todo
+func (s *useCase) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest) (data dtos.UpdateTodoResponse, err error) {
+	if err = s.validator.Validate(params); err != nil {
+		err = response.New[dtos.UpdateTodoResponse]().
+			Error().
+			SetCode(http.StatusBadRequest).
+			SetMessage(constants.ErrFailedValidateRequest).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	data, err = s.todosRepository.UpdateTodo(ctx, params)
+	if err != nil {
+		err = response.New[dtos.UpdateTodoResponse]().
+			Error().
+			SetCode(http.StatusInternalServerError).
+			SetMessage(constants.ErrFailedUpdateTodo).
 			SetDetail(err).
 			SetContext(ctx)
 		return
