@@ -22,31 +22,28 @@ func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseC
 	}
 }
 
-func (s *useCase) InsertTodo(request *models.Todos) error {
-	return s.todosRepository.InsertTodo(request)
-}
-
-// DeleteTodoById implements interfaces.TodosUseCase.
+// DeleteTodoById implements interfaces.TodosUseCase
 func (s *useCase) DeleteTodoById(id string) error {
 	return s.todosRepository.DeleteTodoById(id)
 }
 
-// FindTodoById implements interfaces.TodosUseCase.
+// FindTodoById implements interfaces.TodosUseCase
 func (s *useCase) FindTodoById(id string) (*models.Todos, error) {
 	return s.todosRepository.FindTodoById(id)
 }
 
-// UpdateTodoById implements interfaces.TodosUseCase.
+// UpdateTodoById implements interfaces.TodosUseCase
 func (s *useCase) UpdateTodoById(id string, request *models.Todos) error {
 	return s.todosRepository.UpdateTodoById(id, request)
 }
 
+// GetTodo is function to get todo detail
 func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.GetTodoResponse]().
 			Error().
 			SetCode(http.StatusBadRequest).
-			SetMessage(constants.ErrFailedGetTodo).
+			SetMessage(constants.ErrFailedValidateRequest).
 			SetDetail(err).
 			SetContext(ctx)
 		return
@@ -58,6 +55,32 @@ func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (dat
 			Error().
 			SetCode(http.StatusInternalServerError).
 			SetMessage(constants.ErrFailedGetTodo).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	return
+}
+
+// CreateTodo is function to create todo
+func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest) (data dtos.CreateTodoResponse, err error) {
+	if err = s.validator.Validate(params); err != nil {
+		err = response.New[dtos.GetTodoResponse]().
+			Error().
+			SetCode(http.StatusBadRequest).
+			SetMessage(constants.ErrFailedValidateRequest).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	data, err = s.todosRepository.CreateTodo(ctx, &params.Todos)
+	if err != nil {
+		err = response.New[dtos.CreateTodoResponse]().
+			Error().
+			SetCode(http.StatusInternalServerError).
+			SetMessage(constants.ErrFailedCreateTodo).
 			SetDetail(err).
 			SetContext(ctx)
 		return

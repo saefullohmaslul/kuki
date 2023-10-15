@@ -12,17 +12,17 @@ type TodosGrpcHandler interface {
 }
 
 type TodosRepository interface {
-	InsertTodo(request *models.Todos) error
 	FindTodoById(id string) (*models.Todos, error)
 	UpdateTodoById(id string, request *models.Todos) error
 	DeleteTodoById(id string) error
 	GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error)
+	CreateTodo(ctx context.Context, params *models.Todos) (data dtos.CreateTodoResponse, err error)
 }
 
 type TodosUseCase interface {
-	InsertTodo(request *models.Todos) error
 	FindTodoById(id string) (*models.Todos, error)
 	UpdateTodoById(id string, request *models.Todos) error
 	DeleteTodoById(id string) error
 	GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error)
+	CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest) (data dtos.CreateTodoResponse, err error)
 }

@@ -18,20 +18,6 @@ func NewRepository(postgres database.Postgres) interfaces.TodosRepository {
 	}
 }
 
-func (r *repository) InsertTodo(request *models.Todos) error {
-	tx := r.postgres.DB.Begin()
-
-	err := tx.Model(&models.Todos{}).Create(request).Error
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	tx.Commit()
-
-	return nil
-}
-
 // FindTodoById implements interfaces.TodosRepository.
 func (r *repository) FindTodoById(id string) (*models.Todos, error) {
 	var todo models.Todos
@@ -74,6 +60,7 @@ func (r *repository) DeleteTodoById(id string) error {
 	return nil
 }
 
+// GetTodo is function to get todo detail
 func (r *repository) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {
 	err = r.postgres.DB.
 		WithContext(ctx).
@@ -82,5 +69,21 @@ func (r *repository) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (
 		Find(&data).
 		Error
 
+	return
+}
+
+// CreateTodo is function to create todo
+func (r *repository) CreateTodo(ctx context.Context, params *models.Todos) (data dtos.CreateTodoResponse, err error) {
+	err = r.postgres.DB.
+		WithContext(ctx).
+		Table("todos").
+		Create(&params).
+		Error
+
+	if err != nil {
+		return
+	}
+
+	data.Todos = *params
 	return
 }
