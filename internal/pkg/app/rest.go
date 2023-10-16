@@ -3,14 +3,16 @@ package app
 import (
 	"context"
 	"fmt"
+	"net"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
 	"github.com/labstack/gommon/log"
 	internalGrpc "github.com/saefullohmaslul/kuki/internal/grpc"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
 )
 
 type Rest struct {
@@ -33,6 +35,10 @@ func (a *Rest) Start(ctx context.Context) {
 		grpc.WithBlock(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
+	if err != nil {
+		log.Printf("Could not dial gRPC server: %s", err.Error())
+		return
+	}
 	if err != nil {
 		panic(err)
 	}

@@ -3,12 +3,14 @@ package app
 import (
 	"context"
 	"fmt"
+	"net"
+
 	"github.com/labstack/gommon/color"
 	"github.com/labstack/gommon/log"
 	internalGrpc "github.com/saefullohmaslul/kuki/internal/grpc"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"net"
 )
 
 type Grpc struct {
