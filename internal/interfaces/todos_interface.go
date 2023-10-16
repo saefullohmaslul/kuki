@@ -2,11 +2,8 @@ package interfaces
 
 import (
 	"context"
-<<<<<<< HEAD
 
-=======
 	"github.com/saefullohmaslul/kuki/internal/dtos"
->>>>>>> main
 	"github.com/saefullohmaslul/kuki/internal/grpc"
 	"github.com/saefullohmaslul/kuki/internal/models"
 )
@@ -25,14 +22,6 @@ type (
 		DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest) (err error)
 	}
 
-<<<<<<< HEAD
-type TodosUseCase interface {
-	InsertTodo(ctx context.Context, request *models.Todos) error
-	FindTodoById(ctx context.Context, id string) (*models.Todos, error)
-	UpdateTodoById(ctx context.Context, id string, request *models.Todos) error
-	DeleteTodoById(ctx context.Context, id string) error
-}
-=======
 	// TodosUseCase is an interface for todos useCase
 	TodosUseCase interface {
 		GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error)
@@ -41,4 +30,3 @@ type TodosUseCase interface {
 		DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest) (err error)
 	}
 )
->>>>>>> main

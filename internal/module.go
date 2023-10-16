@@ -12,11 +12,8 @@ import (
 	"github.com/saefullohmaslul/kuki/internal/pkg/app"
 	"github.com/saefullohmaslul/kuki/internal/pkg/database"
 	"github.com/saefullohmaslul/kuki/internal/pkg/env"
-<<<<<<< HEAD
 	"github.com/saefullohmaslul/kuki/internal/pkg/jeager"
-=======
 	"github.com/saefullohmaslul/kuki/internal/pkg/validator"
->>>>>>> main
 	"go.uber.org/fx"
 )
 

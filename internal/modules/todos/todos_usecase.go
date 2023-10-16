@@ -2,17 +2,15 @@ package todos
 
 import (
 	"context"
-<<<<<<< HEAD
+
+	"net/http"
 
 	"github.com/opentracing/opentracing-go"
-=======
 	"github.com/saefullohmaslul/kuki/internal/constants"
 	"github.com/saefullohmaslul/kuki/internal/dtos"
->>>>>>> main
 	"github.com/saefullohmaslul/kuki/internal/interfaces"
 	"github.com/saefullohmaslul/kuki/internal/pkg/response"
 	"github.com/saefullohmaslul/kuki/internal/pkg/validator"
-	"net/http"
 )
 
 type useCase struct {
@@ -27,43 +25,11 @@ func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseC
 	}
 }
 
-<<<<<<< HEAD
-func (s *useCase) InsertTodo(ctx context.Context, request *models.Todos) error {
-	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.InsertTodo")
-	defer trace.Finish()
-	return s.todosRepository.InsertTodo(request)
-}
-
-// DeleteTodoById implements interfaces.TodosUseCase.
-func (s *useCase) DeleteTodoById(ctx context.Context, id string) error {
-	todo, err := s.FindTodoById(ctx, id)
-	if err != nil {
-		return err
-	}
-	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.DeleteTodoById")
-	defer trace.Finish()
-	return s.todosRepository.DeleteTodoById(todo.TodoID)
-}
-
-// FindTodoById implements interfaces.TodosUseCase.
-func (s *useCase) FindTodoById(ctx context.Context, id string) (*models.Todos, error) {
-	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.FindTodoById")
-	defer trace.Finish()
-	return s.todosRepository.FindTodoById(id)
-}
-
-// UpdateTodoById implements interfaces.TodosUseCase.
-func (s *useCase) UpdateTodoById(ctx context.Context, id string, request *models.Todos) error {
-	todo, err := s.FindTodoById(ctx, id)
-	if err != nil {
-		return err
-	}
-	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.UpdateTodoById")
-	defer trace.Finish()
-	return s.todosRepository.UpdateTodoById(todo.TodoID, request)
-=======
 // GetTodo is function to get todo detail
-func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {
+func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {	
+	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.GetTodo")
+	defer trace.Finish()
+
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.GetTodoResponse]().
 			Error().
@@ -90,6 +56,9 @@ func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (dat
 
 // CreateTodo is function to create todo
 func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest) (data dtos.CreateTodoResponse, err error) {
+	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.CreateTodo")
+	defer trace.Finish()
+	
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.CreateTodoResponse]().
 			Error().
@@ -116,6 +85,8 @@ func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest
 
 // UpdateTodo is function to update todo
 func (s *useCase) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest) (data dtos.UpdateTodoResponse, err error) {
+		trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.UpdateTodo")
+	defer trace.Finish()
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.UpdateTodoResponse]().
 			Error().
@@ -142,6 +113,9 @@ func (s *useCase) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest
 
 // DeleteTodo is function to delete todo
 func (s *useCase) DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest) (err error) {
+	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.DeleteTodo")
+	defer trace.Finish()
+
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.GetTodoResponse]().
 			Error().
@@ -164,5 +138,4 @@ func (s *useCase) DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest
 	}
 
 	return
->>>>>>> main
 }
