@@ -2,8 +2,10 @@ package todos
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
+	"github.com/opentracing/opentracing-go"
 	"github.com/saefullohmaslul/kuki/internal/grpc"
 	"github.com/saefullohmaslul/kuki/internal/interfaces"
 	"github.com/saefullohmaslul/kuki/internal/models"
@@ -21,7 +23,9 @@ func NewGrpcHandler(todosUseCase interfaces.TodosUseCase) interfaces.TodosGrpcHa
 
 // GetTodo is a function to get to do by id
 func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) (data *grpc.Todo, err error) {
-	todo, err := h.todosUseCase.FindTodoById(params.TodoId)
+	trace, ctx := opentracing.StartSpanFromContext(ctx, "grpcHandler.GetTodo")
+	defer trace.Finish()
+	todo, err := h.todosUseCase.FindTodoById(ctx, params.TodoId)
 	if err != nil {
 		return nil, err
 	}
@@ -37,6 +41,8 @@ func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) 
 }
 
 func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoRequest) (data *grpc.CreateTodoResponse, err error) {
+	trace, ctx := opentracing.StartSpanFromContext(ctx, "grpcHandler.CreateTodo")
+	defer trace.Finish()
 	request := &models.Todos{
 		TodoID:      uuid.New().String(),
 		Title:       params.Title,
@@ -44,7 +50,7 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 		Completed:   params.Completed,
 	}
 
-	err = h.todosUseCase.InsertTodo(request)
+	err = h.todosUseCase.InsertTodo(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -64,13 +70,16 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 }
 
 func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
+	trace, ctx := opentracing.StartSpanFromContext(ctx, "grpcHandler.UpdateTodo")
+	time.Sleep(2 / time.Second)
+	defer trace.Finish()
 	request := &models.Todos{
 		Title:       params.Title,
 		Description: params.Description,
 		Completed:   params.Completed,
 	}
 
-	err = h.todosUseCase.UpdateTodoById(params.TodoId, request)
+	err = h.todosUseCase.UpdateTodoById(ctx, params.TodoId, request)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +99,9 @@ func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoReq
 }
 
 func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
-	err = h.todosUseCase.DeleteTodoById(params.TodoId)
+	trace, ctx := opentracing.StartSpanFromContext(ctx, "grpcHandler.DeleteTodo")
+	defer trace.Finish()
+	err = h.todosUseCase.DeleteTodoById(ctx, params.TodoId)
 	if err != nil {
 		return nil, err
 	}
