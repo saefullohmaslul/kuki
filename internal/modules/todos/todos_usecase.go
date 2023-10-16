@@ -15,15 +15,11 @@ type useCase struct {
 	validator       *validator.Validator
 }
 
+// NewUseCase is function to create new todos use case
 func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseCase {
 	return &useCase{
 		todosRepository: todosRepository,
 	}
-}
-
-// DeleteTodoById implements interfaces.TodosUseCase
-func (s *useCase) DeleteTodoById(id string) error {
-	return s.todosRepository.DeleteTodoById(id)
 }
 
 // GetTodo is function to get todo detail
@@ -96,6 +92,32 @@ func (s *useCase) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest
 			Error().
 			SetCode(http.StatusInternalServerError).
 			SetMessage(constants.ErrFailedUpdateTodo).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	return
+}
+
+// DeleteTodo is function to delete todo
+func (s *useCase) DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest) (err error) {
+	if err = s.validator.Validate(params); err != nil {
+		err = response.New[dtos.GetTodoResponse]().
+			Error().
+			SetCode(http.StatusBadRequest).
+			SetMessage(constants.ErrFailedValidateRequest).
+			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	err = s.todosRepository.DeleteTodo(ctx, params)
+	if err != nil {
+		err = response.New[dtos.GetTodoResponse]().
+			Error().
+			SetCode(http.StatusInternalServerError).
+			SetMessage(constants.ErrFailedDeleteTodo).
 			SetDetail(err).
 			SetContext(ctx)
 		return

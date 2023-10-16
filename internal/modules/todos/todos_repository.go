@@ -12,25 +12,11 @@ type repository struct {
 	postgres database.Postgres
 }
 
+// NewRepository is function to create new repository
 func NewRepository(postgres database.Postgres) interfaces.TodosRepository {
 	return &repository{
 		postgres: postgres,
 	}
-}
-
-// DeleteTodoById implements interfaces.TodosRepository.
-func (r *repository) DeleteTodoById(id string) error {
-	tx := r.postgres.DB.Begin()
-
-	err := tx.Model(&models.Todos{}).Where("todo_id = ?", id).Delete(&models.Todos{}).Error
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	tx.Commit()
-
-	return nil
 }
 
 // GetTodo is function to get todo detail
@@ -71,5 +57,17 @@ func (r *repository) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequ
 		Error
 
 	data.Todos = params.Todos
+	return
+}
+
+// DeleteTodo is function to delete todo
+func (r *repository) DeleteTodo(ctx context.Context, params *dtos.DeleteTodoRequest) (err error) {
+	err = r.postgres.DB.
+		WithContext(ctx).
+		Table("todos").
+		Where("todo_id = ?", params.TodoID).
+		Delete(&models.Todos{}).
+		Error
+
 	return
 }

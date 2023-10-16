@@ -31,3 +31,9 @@ type (
 		models.Todos
 	}
 )
+
+type (
+	DeleteTodoRequest struct {
+		TodoID string `json:"todo_id" validate:"required"`
+	}
+)

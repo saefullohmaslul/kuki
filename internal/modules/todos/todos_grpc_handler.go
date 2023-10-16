@@ -60,6 +60,7 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 	return
 }
 
+// UpdateTodo is function to update todo by id
 func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoRequest) (data *grpc.UpdateTodoResponse, err error) {
 	todo, err := h.todosUseCase.UpdateTodo(ctx, &dtos.UpdateTodoRequest{
 		Todos: models.Todos{
@@ -83,11 +84,11 @@ func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoReq
 	return
 }
 
+// DeleteTodo is function to delete todo by id
 func (h *grpcHandler) DeleteTodo(ctx context.Context, params *grpc.DeleteTodoRequest) (data *grpc.Empty, err error) {
-	err = h.todosUseCase.DeleteTodoById(params.TodoId)
-	if err != nil {
-		return nil, err
-	}
+	err = h.todosUseCase.DeleteTodo(ctx, &dtos.DeleteTodoRequest{
+		TodoID: params.TodoId,
+	})
 
-	return &grpc.Empty{}, nil
+	return &grpc.Empty{}, err
 }

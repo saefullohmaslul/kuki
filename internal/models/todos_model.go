@@ -1,5 +1,6 @@
 package models
 
+// Todos is struct to represent todos table
 type Todos struct {
 	TodoID      string `json:"todo_id;primaryKey"`
 	Title       string `json:"title" validate:"required"`
