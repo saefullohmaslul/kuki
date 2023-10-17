@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"github.com/saefullohmaslul/kuki/internal/modules/todos"
+	"github.com/saefullohmaslul/kuki/internal/interfaces"
 	"go.uber.org/fx"
 )
 
@@ -12,10 +12,10 @@ type App interface {
 }
 
 type Dependencies struct {
-	Todos todos.GrpcHandler
+	Todos interfaces.TodosGrpcHandler
 }
 
-func NewDependencies(todos todos.GrpcHandler) *Dependencies {
+func NewDependencies(todos interfaces.TodosGrpcHandler) *Dependencies {
 	return &Dependencies{
 		Todos: todos,
 	}
