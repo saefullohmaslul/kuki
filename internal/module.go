@@ -31,12 +31,11 @@ func bootstrap(
 ) {
 	env.LoadDefaultEnv()
 
-	closer,err := jeager.InitializeJaeger("todos-service")
+	closer, err := jeager.InitializeJaeger("todos-service")
 	if err != nil {
 		log.Printf("Could not initialize jaeger tracer: %s", err.Error())
 		return
 	}
-	
 
 	var (
 		grpcPort      = os.Getenv("GRPC_PORT")
@@ -62,8 +61,8 @@ func bootstrap(
 			OnStop: func(ctx context.Context) error {
 				ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
 				defer cancel()
-				
-				defer func ()  {
+
+				defer func() {
 					if err := closer.Close(); err != nil {
 						log.Printf("Could not close jaeger tracer: %s", err.Error())
 					}

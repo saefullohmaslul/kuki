@@ -26,7 +26,7 @@ func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseC
 }
 
 // GetTodo is function to get todo detail
-func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {	
+func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (data dtos.GetTodoResponse, err error) {
 	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.GetTodo")
 	defer trace.Finish()
 
@@ -58,7 +58,6 @@ func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (dat
 func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest) (data dtos.CreateTodoResponse, err error) {
 	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.CreateTodo")
 	defer trace.Finish()
-	
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.CreateTodoResponse]().
 			Error().
@@ -85,7 +84,7 @@ func (s *useCase) CreateTodo(ctx context.Context, params *dtos.CreateTodoRequest
 
 // UpdateTodo is function to update todo
 func (s *useCase) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequest) (data dtos.UpdateTodoResponse, err error) {
-		trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.UpdateTodo")
+	trace, _ := opentracing.StartSpanFromContext(ctx, "useCase.UpdateTodo")
 	defer trace.Finish()
 	if err = s.validator.Validate(params); err != nil {
 		err = response.New[dtos.UpdateTodoResponse]().

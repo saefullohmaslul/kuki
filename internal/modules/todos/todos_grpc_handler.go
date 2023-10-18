@@ -3,6 +3,7 @@ package todos
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/opentracing/opentracing-go"
 	"github.com/saefullohmaslul/kuki/internal/dtos"
 
@@ -49,25 +50,28 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 	defer trace.Finish()
 	request := &dtos.CreateTodoRequest{
 		Todos: models.Todos{
+			TodoID:      uuid.New().String(),
 			Title:       params.Title,
 			Description: params.Description,
 			Completed:   params.Completed,
 		},
 	}
+
 	todo, err := h.todosUseCase.CreateTodo(ctx, request)
-
 	if err != nil {
-		return
+		return nil, err
 	}
 
-	data.Todo = &grpc.Todo{
-		TodoId:      todo.TodoID,
-		Title:       todo.Title,
-		Description: todo.Description,
-		Completed:   todo.Completed,
+	data = &grpc.CreateTodoResponse{
+		Todo: &grpc.Todo{
+			TodoId:      todo.TodoID,
+			Title:       todo.Title,
+			Description: todo.Description,
+			Completed:   todo.Completed,
+		},
 	}
 
-	return
+	return data, nil
 }
 
 // UpdateTodo is function to update todo by id
