@@ -4,7 +4,7 @@ import "github.com/saefullohmaslul/kuki/internal/models"
 
 type (
 	GetTodoRequest struct {
-		TodoID string `json:"todo_id" validate:"required"`
+		TodoID string `json:"todo_id" param:"todo_id" validate:"required"`
 	}
 
 	GetTodoResponse struct {

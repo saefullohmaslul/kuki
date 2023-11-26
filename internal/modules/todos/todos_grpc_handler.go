@@ -27,7 +27,7 @@ func (h *grpcHandler) GetTodo(ctx context.Context, params *grpc.GetTodoRequest) 
 	})
 
 	data = &grpc.Todo{
-		TodoId:      todo.TodoID,
+		TodoId:      todo.ID.String(),
 		Title:       todo.Title,
 		Description: todo.Description,
 		Completed:   todo.Completed,
@@ -51,7 +51,7 @@ func (h *grpcHandler) CreateTodo(ctx context.Context, params *grpc.CreateTodoReq
 	}
 
 	data.Todo = &grpc.Todo{
-		TodoId:      todo.TodoID,
+		TodoId:      todo.ID.String(),
 		Title:       todo.Title,
 		Description: todo.Description,
 		Completed:   todo.Completed,
@@ -75,7 +75,7 @@ func (h *grpcHandler) UpdateTodo(ctx context.Context, params *grpc.UpdateTodoReq
 	}
 
 	data.Todo = &grpc.Todo{
-		TodoId:      todo.TodoID,
+		TodoId:      todo.ID.String(),
 		Title:       todo.Title,
 		Description: todo.Description,
 		Completed:   todo.Completed,

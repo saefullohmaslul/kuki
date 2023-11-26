@@ -2,6 +2,7 @@ package interfaces
 
 import (
 	"context"
+	"github.com/labstack/echo/v4"
 	"github.com/saefullohmaslul/kuki/internal/dtos"
 	"github.com/saefullohmaslul/kuki/internal/grpc"
 	"github.com/saefullohmaslul/kuki/internal/models"
@@ -11,6 +12,14 @@ type (
 	// TodosGrpcHandler is an interface for todos grpcHandler
 	TodosGrpcHandler interface {
 		grpc.TodosHandlerServer
+	}
+
+	TodosRestHandler interface {
+		Route
+		GetTodo(c echo.Context) error
+		CreateTodo(c echo.Context) error
+		UpdateTodo(c echo.Context) error
+		DeleteTodo(c echo.Context) error
 	}
 
 	// TodosRepository is an interface for todos repository

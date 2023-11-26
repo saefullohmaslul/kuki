@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="environmentGroups">
+      <list>
+        <environmentGroupState>
+          <option name="environments">
+            <list>
+              <environmentState>
+                <option name="id" value="local" />
+                <option name="name" value="Local" />
+              </environmentState>
+              <environmentState>
+                <option name="id" value="development" />
+                <option name="name" value="Development" />
+              </environmentState>
+            </list>
+          </option>
+          <option name="id" value="kuki" />
+          <option name="name" value="kuki" />
+        </environmentGroupState>
+      </list>
+    </option>
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="icon" value="TEST_SOURCE_FOLDER" />
+          <option name="id" value="310c688a-6be4-4097-8662-4ee2aeddbe08" />
+          <option name="name" value="Kuki" />
+          <option name="requests">
+            <list>
+              <requestState>
+                <option name="description" value="Get all todo" />
+                <option name="id" value="b06e5a5b-f6be-427c-9b75-e7ef2c08621b" />
+                <option name="method" value="GET" />
+                <option name="name" value="Get Todos" />
+              </requestState>
+              <requestState>
+                <option name="description" value="Get todo detail" />
+                <option name="id" value="48b569c6-05c2-4297-9012-41baa2f54d5d" />
+                <option name="method" value="GET" />
+                <option name="name" value="Get Todo Detail" />
+                <option name="pathVariables">
+                  <list>
+                    <pathVariableState>
+                      <option name="key" value="todo_id" />
+                      <option name="value" value="abc" />
+                    </pathVariableState>
+                  </list>
+                </option>
+                <option name="url" value="{{host}}/todos/:todo_id" />
+              </requestState>
+              <requestState>
+                <option name="body">
+                  <bodyState>
+                    <option name="raw" value="{&#10;  &quot;title&quot;: &quot;Makan malam&quot;,&#10;  &quot;description&quot;: &quot;Makan malam lauk ikan&quot;,&#10;  &quot;completed&quot;: false&#10;}" />
+                    <option name="type" value="JSON" />
+                  </bodyState>
+                </option>
+                <option name="description" value="Create new todo" />
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Content-Type" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="c0da0fe1-85fa-4951-8a8a-fd99dbe186bd" />
+                <option name="method" value="POST" />
+                <option name="name" value="Create Todo" />
+                <option name="url" value="{{host}}/todos/" />
+              </requestState>
+            </list>
+          </option>
+          <option name="sortWeight" value="1000000" />
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="folderPath" value="$PROJECT_DIR$/.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+          <option name="variables">
+            <variablesState>
+              <option name="json" value="{&#10;  &quot;local&quot;: {&#10;    &quot;host&quot;: &quot;http://localhost:1323&quot;&#10;  }&#10;}" />
+            </variablesState>
+          </option>
+        </folderState>
+      </list>
+    </option>
+    <option name="id" value="fdc4421f-a0b2-41e9-b948-6f875a0be230" />
+    <option name="selectedEnvironmentIds">
+      <set>
+        <option value="local" />
+      </set>
+    </option>
+  </component>
+</project>

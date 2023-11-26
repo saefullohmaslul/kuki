@@ -25,6 +25,7 @@ var Module = fx.Options(
 func bootstrap(
 	lifecycle fx.Lifecycle,
 	dependencies *app.Dependencies,
+	handlers *app.Handlers,
 ) {
 	env.LoadDefaultEnv()
 
@@ -33,7 +34,7 @@ func bootstrap(
 		restPort      = os.Getenv("REST_PORT")
 		grpcListen, _ = net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
 		grpc          = app.NewGrpc(grpcPort, grpcListen, dependencies)
-		rest          = app.NewRest(restPort, grpcListen)
+		rest          = app.NewRest(restPort, handlers)
 	)
 
 	lifecycle.Append(

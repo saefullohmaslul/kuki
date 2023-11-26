@@ -36,7 +36,7 @@ func (r *repository) CreateTodo(ctx context.Context, params *models.Todos) (data
 	err = r.postgres.DB.
 		WithContext(ctx).
 		Table("todos").
-		Create(&params).
+		Create(params).
 		Error
 
 	if err != nil {
@@ -52,7 +52,7 @@ func (r *repository) UpdateTodo(ctx context.Context, params *dtos.UpdateTodoRequ
 	err = r.postgres.DB.
 		WithContext(ctx).
 		Table("todos").
-		Where("todo_id = ?", params.TodoID).
+		Where("todo_id = ?", params.ID).
 		Updates(&params.Todos).
 		Error
 

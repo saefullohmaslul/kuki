@@ -3,51 +3,28 @@ package app
 import (
 	"context"
 	"fmt"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/color"
 	"github.com/labstack/gommon/log"
-	internalGrpc "github.com/saefullohmaslul/kuki/internal/grpc"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"net"
+	"github.com/saefullohmaslul/kuki/internal/interfaces"
+	"reflect"
 )
 
 type Rest struct {
 	port     string
-	listener net.Listener
+	handlers *Handlers
 	server   *echo.Echo
 }
 
-func NewRest(port string, listener net.Listener) App {
+func NewRest(port string, handlers *Handlers) App {
 	return &Rest{
 		port:     port,
-		listener: listener,
+		handlers: handlers,
 	}
 }
 
 func (a *Rest) Start(ctx context.Context) {
-	conn, err := grpc.DialContext(
-		ctx,
-		a.listener.Addr().String(),
-		grpc.WithBlock(),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		panic(err)
-	}
-
 	a.server = echo.New()
-	mux := runtime.NewServeMux()
-
-	err = internalGrpc.RegisterTodosHandlerHandler(ctx, mux, conn)
-	if err != nil {
-		panic(err)
-	}
-
-	a.server.Any("*", echo.WrapHandler(mux))
-
-	fmt.Printf("⇨ http server started on %s\n", color.New().Magenta(fmt.Sprintf(":%s", a.port)))
+	a.handlers.Inject(a.server)
 
 	_ = a.server.Start(fmt.Sprintf(":%s", a.port))
 }
@@ -59,4 +36,34 @@ func (a *Rest) Shutdown(ctx context.Context) {
 	}
 
 	log.Info("Rest server shutdown")
+}
+
+type Handlers struct {
+	Todos interfaces.TodosRestHandler
+}
+
+func NewHandlers(
+	todos interfaces.TodosRestHandler,
+) *Handlers {
+	return &Handlers{
+		Todos: todos,
+	}
+}
+
+func (h *Handlers) Inject(e *echo.Echo) {
+	val := reflect.ValueOf(h).Elem()
+
+	group := e.Group("")
+
+	for i := 0; i < val.NumField(); i++ {
+		if !val.Type().Field(i).IsExported() {
+			continue
+		}
+
+		field := val.Field(i).Interface()
+
+		if handler, ok := field.(interfaces.Route); ok {
+			handler.RegisterRoute(group)
+		}
+	}
 }

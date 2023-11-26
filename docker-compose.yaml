@@ -22,8 +22,6 @@ services:
       - DB_NAME=todos
       - DB_SSL=disable
     restart: on-failure
-    networks:
-      - kuki
 
   db-kuki:
     image: postgres:15
@@ -38,14 +36,8 @@ services:
     volumes:
       - db-kuki:/var/lib/postgresql/data
       - ./database/migrations:/docker-entrypoint-initdb.d
-    networks:
-      - kuki
 volumes:
   db-kuki:
     name: db-kuki
   kuki:
     name: kuki
-
-networks:
-  kuki:
-    driver: bridge

@@ -21,6 +21,7 @@ func NewDependencies(todos interfaces.TodosGrpcHandler) *Dependencies {
 	}
 }
 
-var Module = fx.Option(
+var Module = fx.Options(
+	fx.Provide(NewHandlers),
 	fx.Provide(NewDependencies),
 )

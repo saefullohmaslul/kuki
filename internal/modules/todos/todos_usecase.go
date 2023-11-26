@@ -16,9 +16,10 @@ type useCase struct {
 }
 
 // NewUseCase is function to create new todos use case
-func NewUseCase(todosRepository interfaces.TodosRepository) interfaces.TodosUseCase {
+func NewUseCase(todosRepository interfaces.TodosRepository, validator *validator.Validator) interfaces.TodosUseCase {
 	return &useCase{
 		todosRepository: todosRepository,
+		validator:       validator,
 	}
 }
 
@@ -41,6 +42,15 @@ func (s *useCase) GetTodo(ctx context.Context, params *dtos.GetTodoRequest) (dat
 			SetCode(http.StatusInternalServerError).
 			SetMessage(constants.ErrFailedGetTodo).
 			SetDetail(err).
+			SetContext(ctx)
+		return
+	}
+
+	if !data.IsExist() {
+		err = response.New[dtos.GetTodoResponse]().
+			Error().
+			SetCode(http.StatusNotFound).
+			SetMessage(constants.ErrTodoNotFound).
 			SetContext(ctx)
 		return
 	}
